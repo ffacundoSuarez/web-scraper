@@ -1,0 +1,18 @@
+# Dependencies
+/extension/node_modules
+
+# Build output
+/extension/dist
+
+# IDE
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
