@@ -1,0 +1,37 @@
+.mega-scraper-highlight {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: -2px !important;
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  cursor: crosshair !important;
+  transition: all 0.15s ease !important;
+}
+
+.mega-scraper-selected {
+  outline: 2px solid #8b5cf6 !important;
+  outline-offset: -2px !important;
+  background-color: rgba(139, 92, 246, 0.12) !important;
+}
+
+.mega-scraper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483646;
+  pointer-events: none;
+}
+
+.mega-scraper-tooltip {
+  position: fixed;
+  z-index: 2147483647;
+  background: #1e1b4b;
+  color: #e0e7ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Mega Web Scraper",
+  "version": "1.0.0",
+  "description": "Extrae datos de cualquier sitio web: texto, emails, teléfonos, imágenes, enlaces y más. Rápido, simple y poderoso.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "downloads",
+    "tabs",
+    "clipboardWrite",
+    "sidePanel"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Mega Web Scraper"
+  },
+  "side_panel": {
+    "default_path": "src/popup/index.html"
+  },
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/scraper.ts"],
+      "css": ["src/content/styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
