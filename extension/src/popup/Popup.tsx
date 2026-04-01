@@ -107,83 +107,102 @@ export function Popup() {
     <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
       <TooltipProvider delayDuration={400}>
         <Header onClear={() => void clearData()} />
-        <div className="px-4 pt-2">
-          <div className="flex items-center gap-2 rounded-md bg-secondary/50 px-2.5 py-1.5 text-xs text-muted-foreground">
-            <Globe className="h-3.5 w-3.5 shrink-0" aria-hidden />
+        <div className="px-4 pt-1.5 pb-0.5">
+          <div className="flex items-center gap-1.5 rounded bg-secondary/40 px-2 py-1 text-[11px] text-muted-foreground">
+            <Globe className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
             <span className="truncate" title={currentUrl}>
               {currentUrl || 'Sin URL'}
             </span>
           </div>
         </div>
         <div className="space-y-2 px-4 py-2">
+          {/* CTA principal — Detector de Listas */}
           <Button
             type="button"
-            className="h-10 w-full bg-gradient-to-r from-blue-600 to-violet-600 font-medium text-primary-foreground shadow-sm hover:from-blue-600/90 hover:to-violet-600/90"
-            disabled={scanning}
-            onClick={() => void startScrape()}
+            className={`h-11 w-full text-[13px] font-semibold shadow-sm ${
+              listDetectorActive
+                ? 'bg-amber-600 text-white ring-2 ring-amber-400 ring-offset-1 ring-offset-background hover:bg-amber-700'
+                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-500/90 hover:to-orange-500/90'
+            }`}
+            onClick={() => void toggleListDetector()}
           >
-            {scanning ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
-                Escaneando página...
-              </>
-            ) : (
-              <>
-                <Search className="mr-2 h-4 w-4" aria-hidden />
-                Escanear Página Completa
-              </>
-            )}
+            <LayoutList className="mr-2 h-4.5 w-4.5" aria-hidden />
+            {listDetectorActive ? 'Detector Activo — Click para detener' : 'Detectar Listas'}
           </Button>
-          <div className="grid grid-cols-3 gap-2">
-            <Button
-              type="button"
-              variant={selectorActive ? 'default' : 'outline'}
-              className={`h-9 ${selectorActive ? 'bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-1 ring-offset-background hover:bg-blue-700' : ''}`}
-              onClick={() => void toggleSelector()}
-            >
-              <MousePointer2 className="mr-1.5 h-3.5 w-3.5" aria-hidden />
-              {selectorActive ? 'Activo' : 'Selector'}
-            </Button>
-            <Button
-              type="button"
-              variant={listDetectorActive ? 'default' : 'outline'}
-              className={`h-9 ${listDetectorActive ? 'bg-amber-600 text-white ring-2 ring-amber-400 ring-offset-1 ring-offset-background hover:bg-amber-700' : ''}`}
-              onClick={() => void toggleListDetector()}
-            >
-              <LayoutList className="mr-1.5 h-3.5 w-3.5" aria-hidden />
-              {listDetectorActive ? 'Activo' : 'Listas'}
-            </Button>
-            <Button type="button" variant="outline" className="h-9" onClick={() => void startPagination()}>
-              <ChevronsRight className="mr-1.5 h-3.5 w-3.5" aria-hidden />
-              Paginado
-            </Button>
-          </div>
+
           {listData.itemCount > 0 && (
             <Button
               type="button"
-              className="h-9 w-full bg-gradient-to-r from-amber-600 to-orange-600 font-medium text-white shadow-sm hover:from-amber-600/90 hover:to-orange-600/90"
+              className="h-9 w-full border border-amber-500/30 bg-amber-950/40 text-[12px] font-medium text-amber-300 hover:bg-amber-950/60"
               onClick={openDataTable}
             >
               <TableProperties className="mr-1.5 h-4 w-4" aria-hidden />
               Ver Tabla ({listData.itemCount} items)
             </Button>
           )}
+
+          {/* CTA secundario — Selector Individual */}
+          <Button
+            type="button"
+            variant="outline"
+            className={`h-10 w-full text-[13px] font-medium ${
+              selectorActive
+                ? 'border-blue-500 bg-blue-600 text-white ring-2 ring-blue-400 ring-offset-1 ring-offset-background hover:bg-blue-700'
+                : 'border-border/60 hover:border-blue-500/50 hover:bg-blue-950/30 hover:text-blue-300'
+            }`}
+            onClick={() => void toggleSelector()}
+          >
+            <MousePointer2 className="mr-2 h-4 w-4" aria-hidden />
+            {selectorActive ? 'Selector Activo — Click para detener' : 'Selector Individual'}
+          </Button>
+
+          {/* Herramientas terciarias — Escaneo completo y Paginado */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 text-[11px] text-muted-foreground hover:text-foreground"
+              disabled={scanning}
+              onClick={() => void startScrape()}
+            >
+              {scanning ? (
+                <>
+                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" aria-hidden />
+                  Escaneando...
+                </>
+              ) : (
+                <>
+                  <Search className="mr-1.5 h-3.5 w-3.5" aria-hidden />
+                  Escanear Página
+                </>
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 text-[11px] text-muted-foreground hover:text-foreground"
+              onClick={() => void startPagination()}
+            >
+              <ChevronsRight className="mr-1.5 h-3.5 w-3.5" aria-hidden />
+              Auto-Paginado
+            </Button>
+          </div>
         </div>
         {scanning ? (
-          <div className="px-4">
-            <Progress className="h-1 animate-pulse rounded-none" value={100} />
+          <div className="px-4 pb-1">
+            <Progress className="h-0.5 animate-pulse" value={100} />
           </div>
         ) : null}
-        <Separator />
-        <div className="flex min-h-0 flex-1 flex-col px-3 pb-1 pt-2">
-          <Tabs defaultValue="emails" className="flex min-h-0 flex-1 flex-col gap-2">
-            <TabsList className="grid h-9 w-full shrink-0 grid-cols-9 gap-0.5 bg-secondary/30 p-0.5">
+        <Separator className="opacity-40" />
+        <div className="flex min-h-0 flex-1 flex-col px-3 pb-1 pt-1.5">
+          <Tabs defaultValue="emails" className="flex min-h-0 flex-1 flex-col gap-1.5">
+            <TabsList className="grid h-8 w-full shrink-0 grid-cols-9 gap-0.5 bg-secondary/20 p-0.5">
               {tabConfig.map(({ id, icon: Icon, label }) => (
                 <Tooltip key={id}>
                   <TooltipTrigger asChild>
                     <TabsTrigger
                       value={id}
-                      className="relative flex h-full w-full items-center justify-center rounded-sm px-0 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                      className="relative flex h-full w-full items-center justify-center rounded-sm px-0 transition-colors hover:bg-secondary/60 hover:text-foreground data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-sm"
                     >
                       <Icon className="h-4 w-4 shrink-0" aria-hidden />
                       {getCount(d, id) > 0 ? (

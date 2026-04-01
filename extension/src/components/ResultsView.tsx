@@ -2,6 +2,7 @@ import {
   Building2,
   Clipboard,
   Copy,
+  Download,
   ExternalLink,
   Facebook,
   Image as ImageIcon,
@@ -73,6 +74,25 @@ async function copyText(text: string) {
   } catch {
     void 0
   }
+}
+
+/**
+ * Descarga una imagen usando la API de descargas de Chrome.
+ * Extrae el nombre del archivo de la URL.
+ */
+function downloadImage(url: string) {
+  const filename = url.split('/').pop()?.split('?')[0] || 'image.png'
+  chrome.downloads.download({ url, filename })
+}
+
+/**
+ * Descarga múltiples imágenes secuencialmente con un pequeño delay
+ * para evitar saturar el navegador.
+ */
+function downloadAllImages(items: ImageResult[]) {
+  items.forEach((item, i) => {
+    setTimeout(() => downloadImage(item.src), i * 200)
+  })
 }
 
 /**
@@ -266,29 +286,43 @@ export function ResultsView({ type, data }: ResultsViewProps) {
   if (type === 'images') {
     const items = data as ImageResult[]
     return (
-      <ul className="grid grid-cols-2 gap-2">
-        {items.map((item, i) => (
-          <li key={`${item.src}-${i}`} className={itemClass()}>
-            <a
-              href={item.src}
-              target="_blank"
-              rel="noreferrer"
-              className="block"
-            >
-              <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-md bg-muted">
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="max-h-24 w-full object-contain"
-                  loading="lazy"
-                />
-                <ImageIcon className="pointer-events-none absolute right-1 top-1 h-3 w-3 text-background/80 drop-shadow" />
+      <div className="flex flex-col gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-8 w-full text-xs"
+          onClick={() => downloadAllImages(items)}
+        >
+          <Download className="mr-1.5 h-3.5 w-3.5" aria-hidden />
+          Descargar todas ({items.length})
+        </Button>
+        <ul className="grid grid-cols-2 gap-2">
+          {items.map((item, i) => (
+            <li key={`${item.src}-${i}`} className={itemClass()}>
+              <div className="group relative flex aspect-video items-center justify-center overflow-hidden rounded-md bg-muted">
+                <a href={item.src} target="_blank" rel="noreferrer" className="flex h-full w-full items-center justify-center">
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className="max-h-24 w-full object-contain"
+                    loading="lazy"
+                  />
+                </a>
+                <button
+                  type="button"
+                  className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded bg-black/60 text-white opacity-0 transition-opacity hover:bg-black/80 group-hover:opacity-100"
+                  onClick={(e) => { e.stopPropagation(); downloadImage(item.src) }}
+                  title="Descargar imagen"
+                >
+                  <Download className="h-3 w-3" />
+                </button>
               </div>
               <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{item.alt || 'Sin texto alternativo'}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     )
   }
 
