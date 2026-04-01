@@ -61,17 +61,17 @@ export function ExportMenu({ data, disabled }: ExportMenuProps) {
   }
 
   return (
-    <div className="flex items-center justify-between border-t border-border bg-card/50 px-4 py-2">
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Download className="h-3.5 w-3.5" aria-hidden />
+    <div className="flex items-center justify-between border-t border-border/50 bg-card/30 px-4 py-1.5">
+      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70">
+        <Download className="h-3 w-3" aria-hidden />
         <span>Exportar</span>
       </div>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1">
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="h-8 min-w-[52px] px-2"
+          className="h-7 min-w-[44px] px-2 text-[11px] text-muted-foreground hover:text-foreground"
           disabled={disabled}
           onClick={handleCsv}
         >
@@ -79,9 +79,9 @@ export function ExportMenu({ data, disabled }: ExportMenuProps) {
         </Button>
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="h-8 min-w-[52px] px-2"
+          className="h-7 min-w-[44px] px-2 text-[11px] text-muted-foreground hover:text-foreground"
           disabled={disabled}
           onClick={handleExcel}
         >
@@ -89,9 +89,9 @@ export function ExportMenu({ data, disabled }: ExportMenuProps) {
         </Button>
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="h-8 min-w-[52px] px-2"
+          className="h-7 min-w-[44px] px-2 text-[11px] text-muted-foreground hover:text-foreground"
           disabled={disabled}
           onClick={handleJson}
         >
@@ -101,12 +101,12 @@ export function ExportMenu({ data, disabled }: ExportMenuProps) {
           type="button"
           variant="ghost"
           size="icon"
-          className="h-8 w-8"
+          className="h-7 w-7 text-muted-foreground hover:text-foreground"
           disabled={disabled}
           onClick={() => void handleCopyAll()}
           aria-label="Copiar todo"
         >
-          {flash === 'copy' ? <span className="text-sm">✓</span> : <ClipboardCopy className="h-4 w-4" />}
+          {flash === 'copy' ? <span className="text-xs">✓</span> : <ClipboardCopy className="h-3.5 w-3.5" />}
         </Button>
       </div>
     </div>
